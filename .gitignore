@@ -1,0 +1,17 @@
+# SQL Server Management Studio (SSMS) internals
+*.ssmsfnptr
+*.ssmssqlproj
+*.ssmssln
+*.user
+*.suo
+
+# Local Database Backups and log artifacts
+*.bak
+*.trn
+*.mdf
+*.ldf
+*.log
+
+# Windows & System Environment files
+Thumbs.db
+.DS_Store
