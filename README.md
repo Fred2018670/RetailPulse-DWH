@@ -159,4 +159,5 @@ CALCULATE(
 
 ```
 
+
 Disclaimer: All transactional data, customer identities, and company names utilized within this pipeline are synthetically generated for analytical demonstration purposes.
