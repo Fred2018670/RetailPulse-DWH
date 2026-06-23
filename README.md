@@ -48,6 +48,8 @@ Run scripts within 03_Advanced_Analytics_Queries.sql to review the advanced corp
 
 Open RetailPulse_Executive_Insights.pbix in Power BI Desktop to explore the presentation layer.
 
+---
+
 📈 Key Metrics & Analytical Models Featured
 Cross-Border Tax & Multi-Currency Engine
 The database dynamically scales across multiple currencies (KES, TZS, UGX, RWF) by calculating transactional metrics in local currencies alongside their localized tax rates (Kenya 16%, Tanzania 15%, Uganda/Rwanda 18%). It utilizes computed columns to automatically convert and surface uniform USD values for group-wide executive dashboards.
@@ -75,23 +77,27 @@ SELECT
 FROM FactSales fs1
 JOIN FactSales fs2 ON fs1.OrderID = fs2.OrderID AND fs1.ProductKey < fs2.ProductKey
 GROUP BY fs1.ProductKey, fs2.ProductKey
+
+---
+
 🧱 Advanced Analytical DAX Measures (Presentation Layer)
 To power the interactive .pbix dashboard, 6 custom DAX expressions were engineered to handle advanced cross-border retail analytics, multi-state daily inventory snapshots, and a non-standard retail fiscal calendar:
 
-1. Fiscal YTD Sales (Custom Calendar)
+** 1. `Fiscal YTD Sales (Custom Calendar)`**:
 Calculates cumulative sales revenue from the start of the corporate non-standard fiscal calendar rather than the standard Western calendar.
 
-Code snippet
+```dax
 Fiscal YTD Sales = 
 TOTALYTD(
     SUM(FactSales[RevenueUSD]), 
     DimDate[FullDate], 
     "06-30"
 )
-2. Ending Inventory (Periodic Snapshot)
+```
+** 2. `Ending Inventory (Periodic Snapshot)`**:
 Calculates warehouse asset volumes on the final day of any selected temporal slice, ensuring snapshot volumes do not erroneously aggregate additively across time dimensions.
 
-Code snippet
+```dax
 Ending Inventory Snapshot = 
 CALCULATE(
     SUM(FactInventory[ClosingCount]),
@@ -100,37 +106,50 @@ CALCULATE(
         CALCULATE(COUNTROWS(FactInventory))
     )
 )
-3. Inventory Turnover Ratio (ITR)
+
+```
+**3. `Inventory Turnover Ratio (ITR)`**:
 Measures supply chain health by dividing Cost of Goods Sold (COGS) by Average Inventory value, pinpointing capital efficiency.
 
-Code snippet
+```dax
 Inventory Turnover Ratio = 
 VAR TotalCOGS = SUM(FactSales[TotalCostUSD])
 VAR AvgInventoryValue = AVERAGE(FactInventory[AssetValuationUSD])
 RETURN
 DIVIDE(TotalCOGS, AvgInventoryValue, 0)
-4. Cross-Border Net Revenue (Ex-Tax)
+
+```
+
+** 4. `Cross-Border Net Revenue (Ex-Tax)`**:
 Drives multi-country gross margins by dynamically evaluating country-specific tax rules on the fly, subtracting regional VAT streams from international localized transactions.
 
-Code snippet
+```dax
+
 Cross-Border Net Revenue = 
 SUMX(
     FactSales,
     FactSales[GrossAmountUSD] / (1 + RELATED(DimLocation[TaxRate]))
 )
-5. Active Revenue Risk (Returns Liability)
+
+```
+** 5. `Active Revenue Risk (Returns Liability)`**:
 Quantifies financial exposure by tracking rolling return patterns against newly settled sales pipelines within the 30-day fulfillment window.
 
-Code snippet
+```dax
+
 Active Revenue Risk = 
 VAR TotalReturns = CALCULATE(SUM(FactSales[RevenueUSD]), DimStatus[Status] = "Returned")
 VAR TotalSettled = CALCULATE(SUM(FactSales[RevenueUSD]), DimStatus[Status] = "Completed")
 RETURN
 DIVIDE(TotalReturns, TotalSettled, 0)
-6. Rolling 12-Month Customer LTV Growth
+
+```
+
+** 6. `Rolling 12-Month Customer LTV Growth`**:
 A moving baseline measure analyzing rolling trailing 12-month cohorts to evaluate whether net spending per active customer profile is expanding or contracting over time.
 
-Code snippet
+```dax
+
 Rolling 12M Customer LTV = 
 CALCULATE(
     SUM(FactSales[RevenueUSD]),
@@ -142,4 +161,7 @@ CALCULATE(
     )
 ) / DISTINCTCOUNT(FactSales[CustomerKey])
 
+```
+
 Disclaimer: All transactional data, customer identities, and company names utilized within this pipeline are synthetically generated for analytical demonstration purposes.
+
