@@ -85,7 +85,7 @@ GROUP BY fs1.ProductKey, fs2.ProductKey
 ## 🧱 Advanced Analytical DAX Measures (Presentation Layer)
 To power the interactive .pbix dashboard, 6 custom DAX expressions were engineered to handle advanced cross-border retail analytics, multi-state daily inventory snapshots, and a non-standard retail fiscal calendar:
 
-### ** 1. `Fiscal YTD Sales (Custom Calendar)`**
+### **1. `Fiscal YTD Sales (Custom Calendar)`**
 Calculates cumulative sales revenue from the start of the corporate non-standard fiscal calendar rather than the standard Western calendar.
 ```dax
 Fiscal YTD Sales = 
@@ -95,7 +95,7 @@ TOTALYTD(
     "06-30"
 )
 ```
-### ** 2. `Ending Inventory (Periodic Snapshot)`**
+### **2. `Ending Inventory (Periodic Snapshot)`**
 Calculates warehouse asset volumes on the final day of any selected temporal slice, ensuring snapshot volumes do not erroneously aggregate additively across time dimensions.
 ```dax
 Ending Inventory Snapshot = 
@@ -119,7 +119,7 @@ DIVIDE(TotalCOGS, AvgInventoryValue, 0)
 
 ```
 
-### ** 4. `Cross-Border Net Revenue (Ex-Tax)`**
+### **4. `Cross-Border Net Revenue (Ex-Tax)`**
 Drives multi-country gross margins by dynamically evaluating country-specific tax rules on the fly, subtracting regional VAT streams from international localized transactions.
 ```dax
 
@@ -130,7 +130,7 @@ SUMX(
 )
 
 ```
-### ** 5. `Active Revenue Risk (Returns Liability)`**
+### **5. `Active Revenue Risk (Returns Liability)`**
 Quantifies financial exposure by tracking rolling return patterns against newly settled sales pipelines within the 30-day fulfillment window.
 ```dax
 
@@ -142,7 +142,7 @@ DIVIDE(TotalReturns, TotalSettled, 0)
 
 ```
 
-### ** 6. `Rolling 12-Month Customer LTV Growth`**
+### **6. `Rolling 12-Month Customer LTV Growth`**
 A moving baseline measure analyzing rolling trailing 12-month cohorts to evaluate whether net spending per active customer profile is expanding or contracting over time.
 ```dax
 
