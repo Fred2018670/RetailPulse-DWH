@@ -47,7 +47,7 @@ Execute 02_Analytical_Stored_Procedures.sql to compile the analytical API layers
 Run scripts within 03_Advanced_Analytics_Queries.sql to review the advanced corporate data models.
 
 Open RetailPulse_Executive_Insights.pbix in Power BI Desktop to explore the presentation layer.
-
+```
 ---
 
 ## 📈 Key Metrics & Analytical Models Featured
